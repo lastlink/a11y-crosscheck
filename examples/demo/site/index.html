@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Demo app</title>
+  <link rel="stylesheet" href="/app.css">
+  <script>
+    // The theme is chosen before first paint, from what the user picked last time. The scan
+    // sets the same key before boot, so it exercises this code rather than bypassing it.
+    try {
+      document.documentElement.dataset.theme = localStorage.getItem("demo-theme") || "light";
+    } catch {}
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

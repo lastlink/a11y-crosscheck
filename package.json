@@ -1,0 +1,39 @@
+{
+  "name": "a11y-crosscheck",
+  "version": "0.1.0",
+  "description": "Accessibility scans with three independent engines (axe-core, pa11y, Lighthouse), wired to a real app: SPA readiness, sign-in, themes, viewports and dialogs.",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "a11y-crosscheck": "bin/a11y-crosscheck.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "docs",
+    "examples/configs"
+  ],
+  "scripts": {
+    "scan": "node bin/a11y-crosscheck.mjs",
+    "browser:install": "node bin/a11y-crosscheck.mjs --install-browser",
+    "demo": "node examples/demo/run.mjs",
+    "demo:broken": "node examples/demo/run.mjs --broken",
+    "demo:serve": "node examples/demo/serve.mjs"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "axe-core",
+    "pa11y",
+    "lighthouse"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "axe-core": "^4.10.2",
+    "lighthouse": "^12.2.1",
+    "pa11y": "^10.0.0"
+  }
+}

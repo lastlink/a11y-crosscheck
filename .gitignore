@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# downloaded Chromium and the scan's browser profile (src/browser.mjs, src/cdp.mjs)
+.cache/
+
+# scan output -- reports accumulate locally and never belong in the repo
+reports/
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# local credentials for signed-in scans (A11Y_USER / A11Y_PASS)
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.sw?
