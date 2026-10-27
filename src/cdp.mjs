@@ -5,6 +5,7 @@
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { readyExpression } from "./boot.mjs";
+import { TOOL_ROOT } from "./browser.mjs";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -18,7 +19,7 @@ export async function launchCdp(browser, port = 9333) {
       "--no-default-browser-check",
       "--no-sandbox",
       `--remote-debugging-port=${port}`,
-      `--user-data-dir=${path.join(process.cwd(), ".cache", "a11y-profile")}`,
+      `--user-data-dir=${path.join(TOOL_ROOT, ".cache", "a11y-profile")}`,
       "about:blank"
     ],
     { stdio: "ignore" }

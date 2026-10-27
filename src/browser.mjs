@@ -6,17 +6,24 @@
  * process handle dies and it reports "Failed to launch the browser process" with no further
  * detail. A real Chromium is required, and a pinned one also makes results reproducible.
  *
- * Resolution order: CHROME_PATH, then the local cache, then a system Chrome/Chromium.
- * The cache is ./.cache/puppeteer under the directory the scan runs from (override with
- * A11Y_BROWSER_CACHE), so a checkout is self-contained and `.cache/` can simply be gitignored.
+ * Resolution order: CHROME_PATH, then the tool's own cache, then a system Chrome/Chromium.
+ *
+ * The cache lives with the tool, not with the project being scanned (override with
+ * A11Y_BROWSER_CACHE): a global install downloads one browser for every project, a dev
+ * dependency keeps it inside node_modules, and the scanned repo gets nothing to gitignore but
+ * its reports. .puppeteerrc.cjs points puppeteer's own install-time download at the same place.
  */
 import { existsSync, readdirSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+/** Where this tool is installed: the repo, node_modules/a11y-crosscheck, or the global prefix. */
+export const TOOL_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 export const CACHE = process.env.A11Y_BROWSER_CACHE
   ? path.resolve(process.env.A11Y_BROWSER_CACHE)
-  : path.join(process.cwd(), ".cache", "puppeteer");
+  : path.join(TOOL_ROOT, ".cache", "puppeteer");
 
 /** Executable layouts used by Chrome for Testing / Chromium across platforms. */
 const EXE_CANDIDATES = [

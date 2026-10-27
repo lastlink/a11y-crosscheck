@@ -32,14 +32,17 @@ its placeholder.
 
 ## Add it to your project
 
-**1. Install it.** Either as a dev dependency from git:
+**1. Install it** in one of two ways. Either way your project doesn't depend on it, and your
+project's side is the same: an `a11y.config.mjs` and a `reports/` folder. Node 22 or newer.
 
-```sh
-npm install --save-dev git+https://github.com/lastlink/a11y-crosscheck.git
-```
+| | Install | Run | Pick it when |
+| --- | --- | --- | --- |
+| **Global** (recommended) | `npm install -g git+https://github.com/lastlink/a11y-crosscheck.git` | `a11y-crosscheck` from any project folder | You scan regularly: one install, and one browser download, for every project |
+| **Vendored** | Copy `bin/`, `src/` and `.puppeteerrc.cjs` into your repo (say `scripts/a11y-crosscheck/`), then add `axe-core`, `pa11y` and `lighthouse` to your devDependencies | `node scripts/a11y-crosscheck/bin/a11y-crosscheck.mjs` | You want to change the scanner itself, or not install anything globally |
 
-or copy `bin/` and `src/` into your repo (say `scripts/a11y-crosscheck/`) and add the three
-engines to your own devDependencies: `axe-core`, `pa11y`, `lighthouse`. Node 22 or newer.
+The command always works on the folder it is run from: it reads `./a11y.config.mjs` and writes
+to `./reports/a11y`. The Chromium it needs is kept with the tool, not in your project. With a
+vendored copy, add `scripts/a11y-crosscheck/.cache/` to your `.gitignore`.
 
 **2. Write `a11y.config.mjs`** at your project root. Start from whichever example is closest:
 
@@ -52,7 +55,8 @@ engines to your own devDependencies: `axe-core`, `pa11y`, `lighthouse`. Node 22 
 [docs/wiring.md](docs/wiring.md) walks through every field: what "rendered" means for your
 app, how it signs in, how a theme is chosen, which dialogs to open.
 
-**3. Add scripts and ignore the output:**
+**3. Add scripts and ignore the output.** The scripts are optional shortcuts for the global
+install; with a vendored copy, replace `a11y-crosscheck` with the `node ...` command above.
 
 ```jsonc
 // package.json
@@ -64,8 +68,7 @@ app, how it signs in, how a theme is chosen, which dialogs to open.
 ```
 
 ```gitignore
-# a11y-crosscheck: downloaded Chromium + browser profile, and the reports
-.cache/
+# a11y-crosscheck reports
 reports/
 ```
 
@@ -146,11 +149,11 @@ pa11y and Lighthouse drive Chromium through puppeteer, and **puppeteer cannot la
 Windows**: `msedge.exe` forks and exits, so puppeteer's process handle dies and it reports
 `Failed to launch the browser process` with no further detail. A real Chromium is required.
 
-The scanner resolves one in this order: `CHROME_PATH`, then `./.cache/puppeteer` (override with
-`A11Y_BROWSER_CACHE`), then a system Chrome/Chromium. If none is found, it downloads one into
-the cache on first run. Edge is deliberately excluded. Copy
-[.puppeteerrc.cjs](.puppeteerrc.cjs) into your project to keep puppeteer's own install-time
-download in the same place.
+The scanner looks for one in this order: `CHROME_PATH`, then the tool's own
+`.cache/puppeteer` (set `A11Y_BROWSER_CACHE` to use a different folder), then a system
+Chrome/Chromium. If it finds none, it downloads one into that cache on the first run. It never
+uses Edge. [.puppeteerrc.cjs](.puppeteerrc.cjs) sends puppeteer's own install-time download to
+the same cache, so in practice the browser is already there after `npm install`.
 
 ## What no scanner covers
 

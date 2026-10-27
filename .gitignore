@@ -26,3 +26,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 *.sw?
+
+# local notes and plans, kept out of the repo (same convention as the projects this came from)
+archive/

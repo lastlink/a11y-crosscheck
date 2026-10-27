@@ -11,7 +11,8 @@
     "bin",
     "src",
     "docs",
-    "examples/configs"
+    "examples/configs",
+    ".puppeteerrc.cjs"
   ],
   "scripts": {
     "scan": "node bin/a11y-crosscheck.mjs",
